@@ -1,5 +1,5 @@
 <template>
-  <div class="w-3/5 bg-gray-800 mx-auto flex flex-col ">
+  <div class="w-3/5 bg-gray-800 mx-auto flex flex-col rounded ">
     <h1 class="text-center text-white">Todo-List</h1>
 
     <input class="w-96 mx-auto my-6 border-4 border-indigo-600 h-12 rounded-lg" type="text" @change="addToList" v-model="text" />
