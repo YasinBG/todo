@@ -1,58 +1,66 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
+  <div class="w-3/5 bg-gray-800 mx-auto flex flex-col ">
+    <h1 class="text-center text-white">Todo-List</h1>
+
+    <input class="w-96 mx-auto my-6 border-4 border-indigo-600 h-12 rounded-lg" type="text" @change="addToList" v-model="text" />
+
+    <ul class="mx-auto my-4 text-white ">
+      <li v-for="(item, index) in list" :key="index" class="">
+        <span @click="toggleCheck(item)" class=" mx-12 mb-2  ">
+          <input type="checkbox" :checked="item.done" class="w-5
+          h-5 mr-2 mb-4"  />
+          <span :class="{ done: item.done }" class="mx-2">{{ item.label }}</span>
+        </span>
+        <button @click="deleteFromList(index)" class=" flex-none border-4 border-indigo-600 bg-indigo-300 w-20 rounded">Delete</button>
+      
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+
+import { ref } from 'vue';
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  components:{
+
+  },
+  setup() {
+     let list=ref([])
+     let  text =ref("")
+
+    return {
+      list,
+      text
+
+    }
+  },
+  created() {
+    this.list = JSON.parse(localStorage.getItem("list")) || [];
+  },
+  methods: {
+    addToList() {
+      this.list.unshift({ label: this.text, done: false });
+      this.updateLocalStorage();
+      this.text = "";
+    },
+    deleteFromList(index) {
+      this.list.splice(index, 1);
+      this.updateLocalStorage();
+    },
+    updateLocalStorage() {
+      localStorage.setItem("list", JSON.stringify(this.list));
+    },
+    toggleCheck(item) {
+      item.done = !item.done;
+      this.updateLocalStorage();
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+<style>
+
 </style>
